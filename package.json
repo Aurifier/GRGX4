@@ -1,0 +1,20 @@
+{
+  "name": "grgx",
+  "version": "4.0.0",
+  "description": "Grassius Regulatory Grid eXplorer",
+  "private": "true",
+  "repository": {
+    "type": "git",
+    "url": "http://github.com/Aurifier/grgx4.git"
+  },
+  "dependencies": {
+    "cytoscape": "^2.2.10"
+  },
+  "devDependencies": {
+    "browserify": "^4.1.11",
+    "karma": "^0.12.16",
+    "karma-chrome-launcher": "^0.1.4",
+    "karma-coverage": "^0.2.4",
+    "karma-jasmine": "^0.2.2"
+  }
+}
