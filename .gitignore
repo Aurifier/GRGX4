@@ -1,2 +1,4 @@
 /application.js
 /node_modules/
+/.idea/
+/*.iml
