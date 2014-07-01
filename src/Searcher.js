@@ -15,6 +15,8 @@ Searcher.prototype.find = function(term) {
                 if(geneJSON.length == 1) {
                     var exactGene = {id:geneJSON[0].id, name: geneJSON[0].name};
                     gResolve(exactGene);
+                } else {
+                    gResolve(null);
                 }
             });
         });

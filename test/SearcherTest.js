@@ -16,7 +16,7 @@ describe("A search object", function() {
 
     describe("finding one or more exact matches", function() {
 
-        it("should promise a list of one exact match", function(done) {
+        it("should promise a list containing one exact gene match", function(done) {
             var exactGeneName = "fooGene";
             var id = 1234;
             var expectedGene = {id: id, name: exactGeneName};
@@ -38,6 +38,34 @@ describe("A search object", function() {
                 function(response) {
                     expect(response.length).toEqual(1);
                     expect(response[0]).toEqual(expectedGene);
+                    done();
+                }
+            );
+        });
+
+        it("should promise a list containing one exact protein match", function(done) {
+            var exactProteinName = "footein";
+            var id = 5812;
+            var expectedProtein = {id: id, name: exactProteinName};
+            var species = 'malaria'
+            jasmine.Ajax.stubRequest('/'+species+'/gene/json?name='+exactProteinName).andReturn({
+                "status": 200,
+                "contentType": "application/json",
+                "responseText": '[]'
+            });
+            jasmine.Ajax.stubRequest('/'+species+'/protein/json?name='+exactProteinName).andReturn({
+                "status": 200,
+                "contentType": "application/json",
+                "responseText": '[{"id":' + id + ',"name":"' + exactProteinName + '","type":"","ranges":"","transcript":""}]'
+            });
+            var searcher = new Searcher([species]);
+
+            var resultPromise = searcher.find(exactProteinName);
+
+            resultPromise.then(
+                function(response) {
+                    expect(response.length).toEqual(1);
+                    expect(response[0]).toEqual(expectedProtein);
                     done();
                 }
             );
