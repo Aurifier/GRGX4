@@ -15,17 +15,19 @@ describe("A search object", function() {
     });
 
     describe("finding one or more exact matches", function() {
-
         it("should promise a list containing one exact gene match", function(done) {
             var exactGeneName = "fooGene";
             var id = 1234;
+            var species = 'maize';
             var expectedGene = {id: id, name: exactGeneName};
-            jasmine.Ajax.stubRequest('/maize/gene/json?name='+exactGeneName).andReturn({
+            var url = '/'+species+'/gene/json?name='+exactGeneName;
+            jasmine.Ajax.stubRequest(url).andReturn({
                 "status": 200,
                 "contentType": "application/json",
                 "responseText": '[{"id":' + id + ',"name":"' + exactGeneName + '","type":"","ranges":"","transcript":""}]'
             });
-            jasmine.Ajax.stubRequest('/maize/protein/json?name='+exactGeneName).andReturn({
+            url = '/'+species+'/protein/json?name='+exactGeneName;
+            jasmine.Ajax.stubRequest(url).andReturn({
                 "status": 200,
                 "contentType": "application/json",
                 "responseText": '[]'
@@ -37,7 +39,18 @@ describe("A search object", function() {
             resultPromise.then(
                 function(response) {
                     expect(response.length).toEqual(1);
-                    expect(response[0]).toEqual(expectedGene);
+                    expect(response[0].species).toEqual(species);
+                    expect(response[0].results.length).toEqual(1);
+                    expect(response[0].results[0]).toEqual(expectedGene);
+                    done();
+                },
+                function(failure) {
+                    if(failure instanceof Error) {
+                        console.log(failure.message + " at " + failure.fileName + " line " + failure.lineNumber);
+                    } else {
+                        console.log(failure);
+                    }
+                    expect(true).toBe(false);
                     done();
                 }
             );
@@ -65,7 +78,9 @@ describe("A search object", function() {
             resultPromise.then(
                 function(response) {
                     expect(response.length).toEqual(1);
-                    expect(response[0]).toEqual(expectedProtein);
+                    expect(response[0].species).toEqual(species);
+                    expect(response[0].results.length).toEqual(1);
+                    expect(response[0].results[0]).toEqual(expectedProtein);
                     done();
                 }
             );
@@ -95,9 +110,51 @@ describe("A search object", function() {
 
             resultPromise.then(
                 function(response) {
-                    expect(response.length).toEqual(2);
-                    expect(response).toContain(expectedGene);
-                    expect(response).toContain(expectedProtein);
+                    expect(response.length).toEqual(1);
+                    expect(response[0].species).toEqual(species);
+                    expect(response[0].results.length).toEqual(2);
+                    expect(response[0].results).toContain(expectedGene);
+                    expect(response[0].results).toContain(expectedProtein);
+                    done();
+                }
+            );
+        });
+
+        xit("should promise a list containing the exact gene matches in one of two species", function(done) {
+            var species = ["schwein", "hund"];
+            var exactTerm = "HuMYB4509";
+            var g_id = 7812;
+            var expectedGene = {id: g_id, name: exactTerm};
+            jasmine.Ajax.stubRequest('/'+species[0]+'/gene/json?name='+exactTerm).andReturn({
+                "status": 200,
+                "contentType": "application/json",
+                "responseText": '[]'
+            });
+            jasmine.Ajax.stubRequest('/'+species[0]+'/protein/json?name='+exactTerm).andReturn({
+                "status": 200,
+                "contentType": "application/json",
+                "responseText": '[]'
+            });
+            jasmine.Ajax.stubRequest('/'+species[1]+'/gene/json?name='+exactTerm).andReturn({
+                "status": 200,
+                "contentType": "application/json",
+                "responseText": '[{"id":' + g_id + ',"name":"' + exactTerm + '","type":"","ranges":"","transcript":""}]'
+            });
+            jasmine.Ajax.stubRequest('/'+species[1]+'/protein/json?name='+exactTerm).andReturn({
+                "status": 200,
+                "contentType": "application/json",
+                "responseText": '[]'
+            });
+            var searcher = new Searcher(species);
+
+            var resultPromise = searcher.find(exactTerm);
+
+            resultPromise.then(
+                function(response) {
+                    expect(response.length).toEqual(1);
+                    expect(response[0].species).toEqual(species[1]);
+                    expect(response[0].results.length).toEqual(1);
+                    expect(response[0].results).toContain(expectedGene);
                     done();
                 }
             );
