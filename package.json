@@ -12,6 +12,8 @@
   },
   "devDependencies": {
     "browserify": "^4.1.11",
+    "grunt": "^0.4.5",
+    "grunt-contrib-jshint": "^0.10.0",
     "karma": "^0.12.16",
     "karma-chrome-launcher": "^0.1.4",
     "karma-coverage": "^0.2.4",
