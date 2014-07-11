@@ -17,18 +17,7 @@ Searcher.prototype.findGene = function(term) {
         }
 
         Promise.all(exactPromises).then(function(matches) {
-            var results = [];
-            var specToIdx = {};
-            for(var i=0; i < self.speciesList.length; i++) {
-                results[i] = {species: null, results: []};
-                results[i].species = self.speciesList[i];
-                specToIdx[self.speciesList[i]] = i;
-            }
-            matches.filter(isNotNull).forEach(function(match) {
-                var idx = specToIdx[match.species];
-                results[idx].results.push({id: match.id, name: match.name});
-            });
-            resolve(results.filter(hasNonEmptyResultsList));
+            resolve(processExactMatches(matches, self.speciesList));
         });
     });
 };
@@ -44,21 +33,28 @@ Searcher.prototype.findProtein = function(term) {
         }
 
         Promise.all(exactPromises).then(function(matches) {
-            var results = [];
-            var specToIdx = {};
-            for(var i=0; i < self.speciesList.length; i++) {
-                results[i] = {species: null, results: []};
-                results[i].species = self.speciesList[i];
-                specToIdx[self.speciesList[i]] = i;
-            }
-            matches.filter(isNotNull).forEach(function(match) {
-                var idx = specToIdx[match.species];
-                results[idx].results.push({id: match.id, name: match.name});
-            });
-            resolve(results.filter(hasNonEmptyResultsList));
+            resolve(processExactMatches(matches, self.speciesList));
         });
     });
 };
+
+function processExactMatches(matches, speciesList) {
+    var results = [];
+    var specToIdx = {};
+
+    for(var i=0; i < speciesList.length; i++) {
+        results[i] = {species: null, results: []};
+        results[i].species = speciesList[i];
+        specToIdx[speciesList[i]] = i;
+    }
+
+    matches.filter(isNotNull).forEach(function(match) {
+        var idx = specToIdx[match.species];
+        results[idx].results.push({id: match.id, name: match.name});
+    });
+
+    return(results.filter(hasNonEmptyResultsList));
+}
 
 function exactGenePromise(species, term) {
     return(function(res, rej) {
