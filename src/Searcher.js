@@ -32,7 +32,7 @@ Searcher.prototype.find = function(term) {
                 results[idx].results = results[idx].results || [];
                 results[idx].results.push({id: match.id, name: match.name});
             });
-            resolve(results.filter(nonEmptyResult));
+            resolve(results.filter(hasNonEmptyResultsList));
         });
 
         function exactGenePromise(species) {
@@ -64,7 +64,7 @@ Searcher.prototype.find = function(term) {
            return(val !== null);
         }
 
-        function nonEmptyResult(result) {
+        function hasNonEmptyResultsList(result) {
             return(Boolean(result.results));
         }
     });
