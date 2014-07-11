@@ -1,3 +1,12 @@
+function rejectFunc (failure) {
+    if(failure instanceof Error) {
+        console.log(failure.message + " at " + failure.fileName + " line " + failure.lineNumber);
+    } else {
+        console.log(failure);
+    }
+    expect(true).toBe(false);
+}
+
 describe("A search object", function() {
     beforeEach(function() {
         jasmine.Ajax.install();
@@ -42,15 +51,6 @@ describe("A search object", function() {
                     expect(response[0].species).toEqual(species);
                     expect(response[0].results.length).toEqual(1);
                     expect(response[0].results[0]).toEqual(expectedGene);
-                    done();
-                },
-                function(failure) {
-                    if(failure instanceof Error) {
-                        console.log(failure.message + " at " + failure.fileName + " line " + failure.lineNumber);
-                    } else {
-                        console.log(failure);
-                    }
-                    expect(true).toBe(false);
                     done();
                 }
             );
@@ -120,7 +120,7 @@ describe("A search object", function() {
             );
         });
 
-        xit("should promise a list containing the exact gene matches in one of two species", function(done) {
+        it("should promise a list containing the exact gene matches in one of two species", function(done) {
             var species = ["schwein", "hund"];
             var exactTerm = "HuMYB4509";
             var g_id = 7812;
