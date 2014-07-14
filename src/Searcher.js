@@ -17,7 +17,7 @@ Searcher.prototype.findGene = function(term) {
         }
 
         Promise.all(exactPromises).then(function(matches) {
-            resolve(processExactMatches(matches, self.speciesList));
+            resolve(processExactMatches(matches));
         });
     });
 };
@@ -33,27 +33,13 @@ Searcher.prototype.findProtein = function(term) {
         }
 
         Promise.all(exactPromises).then(function(matches) {
-            resolve(processExactMatches(matches, self.speciesList));
+            resolve(processExactMatches(matches));
         });
     });
 };
 
-function processExactMatches(matches, speciesList) {
-    var results = [];
-    var specToIdx = {};
-
-    for(var i=0; i < speciesList.length; i++) {
-        results[i] = {species: null, results: []};
-        results[i].species = speciesList[i];
-        specToIdx[speciesList[i]] = i;
-    }
-
-    matches.filter(isNotNull).forEach(function(match) {
-        var idx = specToIdx[match.species];
-        results[idx].results.push({id: match.id, name: match.name});
-    });
-
-    return(results.filter(hasNonEmptyResultsList));
+function processExactMatches(matches) {
+    return(matches.filter(isNotNull));
 }
 
 function exactGenePromise(species, term) {
@@ -84,8 +70,3 @@ function exactCallback(eRes, eRej, species) {
 function isNotNull(val) {
    return(val !== null);
 }
-
-function hasNonEmptyResultsList(result) {
-    return(result.results.length !== 0);
-}
-

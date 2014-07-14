@@ -23,12 +23,12 @@ describe("A search object", function() {
         expect(searcher.getSpeciesList()).toEqual(species);
     });
 
-    describe("finding one or more exact matches", function() {
+    describe("finding one or more exact gene matches", function() {
         it("should promise a list containing one exact gene match", function(done) {
             var exactGeneName = "fooGene";
             var id = 1234;
             var species = 'maize';
-            var expectedGene = {id: id, name: exactGeneName};
+            var expectedGene = {id: id, name: exactGeneName, species: species};
             var url = '/'+species+'/gene/json?name='+exactGeneName;
             jasmine.Ajax.stubRequest(url).andReturn({
                 "status": 200,
@@ -42,34 +42,7 @@ describe("A search object", function() {
             resultPromise.then(
                 function(response) {
                     expect(response.length).toEqual(1);
-                    expect(response[0].species).toEqual(species);
-                    expect(response[0].results.length).toEqual(1);
-                    expect(response[0].results[0]).toEqual(expectedGene);
-                    done();
-                }
-            );
-        });
-
-        it("should promise a list containing one exact protein match", function(done) {
-            var exactProteinName = "footein";
-            var id = 5812;
-            var expectedProtein = {id: id, name: exactProteinName};
-            var species = 'malaria'
-            jasmine.Ajax.stubRequest('/'+species+'/protein/json?name='+exactProteinName).andReturn({
-                "status": 200,
-                "contentType": "application/json",
-                "responseText": '[{"id":' + id + ',"name":"' + exactProteinName + '","type":"","ranges":"","transcript":""}]'
-            });
-            var searcher = new Searcher([species]);
-
-            var resultPromise = searcher.findProtein(exactProteinName);
-
-            resultPromise.then(
-                function(response) {
-                    expect(response.length).toEqual(1);
-                    expect(response[0].species).toEqual(species);
-                    expect(response[0].results.length).toEqual(1);
-                    expect(response[0].results[0]).toEqual(expectedProtein);
+                    expect(response[0]).toEqual(expectedGene);
                     done();
                 }
             );
@@ -79,7 +52,7 @@ describe("A search object", function() {
             var species = ["schwein", "hund"];
             var exactTerm = "HuMYB4509";
             var g_id = 7812;
-            var expectedGene = {id: g_id, name: exactTerm};
+            var expectedGene = {id: g_id, name: exactTerm, species: species[1]};
             jasmine.Ajax.stubRequest('/'+species[0]+'/gene/json?name='+exactTerm).andReturn({
                 "status": 200,
                 "contentType": "application/json",
@@ -97,12 +70,43 @@ describe("A search object", function() {
             resultPromise.then(
                 function(response) {
                     expect(response.length).toEqual(1);
-                    expect(response[0].species).toEqual(species[1]);
-                    expect(response[0].results.length).toEqual(1);
-                    expect(response[0].results).toContain(expectedGene);
+                    expect(response[0]).toEqual(expectedGene);
                     done();
                 }
             );
+        });
+    });
+
+    describe("finding one or more exact protein matches", function() {
+        it("should promise a list containing one exact protein match", function(done) {
+            var exactProteinName = "footein";
+            var id = 5812;
+            var species = 'malaria'
+            var expectedProtein = {id: id, name: exactProteinName, species: species};
+            jasmine.Ajax.stubRequest('/'+species+'/protein/json?name='+exactProteinName).andReturn({
+                "status": 200,
+                "contentType": "application/json",
+                "responseText": '[{"id":' + id + ',"name":"' + exactProteinName + '","type":"","ranges":"","transcript":""}]'
+            });
+            var searcher = new Searcher([species]);
+
+            var resultPromise = searcher.findProtein(exactProteinName);
+
+            resultPromise.then(
+                function(response) {
+                    expect(response.length).toEqual(1);
+                    expect(response[0]).toEqual(expectedProtein);
+                    done();
+                }
+            );
+        });
+    });
+
+    xdescribe("finding interactions with genes", function() {
+        it("should find one interaction with one targeting protein", function(done) {
+            var geneId = 235;
+            done();
+
         });
     });
 });
