@@ -42,7 +42,7 @@ Searcher.prototype.findInteractions = function(term) {
     return new Promise(function(resolve, reject) {
         resolve([{source: 473, target: 235}]);
     });
-}
+};
 
 function processExactMatches(matches) {
     return(matches.filter(isNotNull));
