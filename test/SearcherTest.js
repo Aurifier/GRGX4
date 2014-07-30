@@ -126,5 +126,29 @@ describe("A search object", function() {
                 done();
             });
         });
+
+        it("should find another interaction with targeting group", function(done) {
+            var geneId = 89;
+            var geneName = "fooooo";
+            var species = "carbon_based";
+            var interactionId = 821;
+            var pGID = 563;
+            var mockGene = {id: geneId, species: species, name: geneName};
+            jasmine.Ajax.stubRequest('/'+species+'/gene/'+geneId+'/proteingene/json').andReturn({
+                "status": 200,
+                "contentType": "application/json",
+                "responseText": '[{"id":'+interactionId+',"gene":'+geneId+',"proteinGroup":'+pGID+'}]'
+            });
+            var searcher = new Searcher([species]);
+
+            var interactionsPromise = searcher.findInteractions(mockGene);
+
+            interactionsPromise.then(function(interactions) {
+                expect(interactions.length).toEqual(1);
+                expect(interactions[0].source).toEqual(pGID);
+                expect(interactions[0].target).toEqual(geneId);
+                done();
+            });
+        });
     });
 });

@@ -40,7 +40,10 @@ Searcher.prototype.findProtein = function(term) {
 
 Searcher.prototype.findInteractions = function(term) {
     return new Promise(function(resolve, reject) {
-        resolve([{source: 473, target: 235}]);
+        var url = '/'+term.species+'/gene/'+term.id+'/proteingene/json';
+        $.getJSON(url).then(function(interactions) {
+            resolve([{source: interactions[0].proteinGroup, target: interactions[0].gene}]);
+        });
     });
 };
 
