@@ -42,7 +42,11 @@ Searcher.prototype.findInteractions = function(term) {
     return new Promise(function(resolve, reject) {
         var url = '/'+term.species+'/gene/'+term.id+'/proteingene/json';
         $.getJSON(url).then(function(interactions) {
-            resolve([{source: interactions[0].proteinGroup, target: interactions[0].gene}]);
+            var returnInteractions = [];
+            for(var i = 0; i < interactions.length; i++) {
+                returnInteractions.push({source: interactions[i].proteinGroup, target: interactions[i].gene});
+            }
+            resolve(returnInteractions);
         });
     });
 };

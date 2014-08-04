@@ -150,5 +150,38 @@ describe("A search object", function() {
                 done();
             });
         });
+
+        it("should find multiple interactions with targeting groups", function(done) {
+            var geneId = 235;
+            var geneName = "blalalalala";
+            var species = "dross-o-philia";
+            var interactionId = 3486;
+            var interactionId2 = 8;
+            var pGID = 473;
+            var pGID2 = 456;
+            var mockGene = {id: geneId, species: species, name: geneName};
+            var mockInteraction = {source: pGID, target: geneId};
+            var mockInteraction2 = {source: pGID2, target: geneId};
+            jasmine.Ajax.stubRequest('/'+species+'/gene/'+geneId+'/proteingene/json').andReturn({
+                "status": 200,
+                "contentType": "application/json",
+                "responseText": '[' +
+                    '{"id":'+interactionId+',"gene":'+geneId+',"proteinGroup":'+pGID+'},' +
+                    '{"id":'+interactionId2+',"gene":'+geneId+',"proteinGroup":'+pGID2+'}' +
+                ']'
+            });
+            var searcher = new Searcher([species]);
+
+            var interactionsPromise = searcher.findInteractions(mockGene);
+
+            interactionsPromise.then(function(interactions) {
+                expect(interactions.length).toEqual(2);
+                expect(interactions).toContain(mockInteraction);
+                expect(interactions).toContain(mockInteraction2);
+                done();
+            });
+        });
+
+        xit("should find one interaction with multiple targeting groups", function(){});
     });
 });
