@@ -12,4 +12,4 @@ Gene.getGene = function(gArgs) {
             resolve(gene);
         });
     });
-}
+};
