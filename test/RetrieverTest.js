@@ -7,7 +7,7 @@ function rejectFunc (failure) {
     expect(true).toBe(false);
 }
 
-describe("A search object", function() {
+describe("A Retriever object", function() {
     beforeEach(function() {
         jasmine.Ajax.install();
     });
@@ -18,7 +18,7 @@ describe("A search object", function() {
 
     it("should have a list of species", function() {
         var species = ['maize', 'cow', 'generic_meat']
-        var searcher = new Searcher(species);
+        var searcher = new Retriever(species);
 
         expect(searcher.getSpeciesList()).toEqual(species);
     });
@@ -35,7 +35,7 @@ describe("A search object", function() {
                 "contentType": "application/json",
                 "responseText": '[{"id":' + id + ',"name":"' + exactGeneName + '","type":"","ranges":"","transcript":""}]'
             });
-            var searcher = new Searcher(['maize']);
+            var searcher = new Retriever(['maize']);
 
             var resultPromise = searcher.findGene(exactGeneName);
 
@@ -63,7 +63,7 @@ describe("A search object", function() {
                 "contentType": "application/json",
                 "responseText": '[{"id":' + g_id + ',"name":"' + exactTerm + '","type":"","ranges":"","transcript":""}]'
             });
-            var searcher = new Searcher(species);
+            var searcher = new Retriever(species);
 
             var resultPromise = searcher.findGene(exactTerm);
 
@@ -88,7 +88,7 @@ describe("A search object", function() {
                 "contentType": "application/json",
                 "responseText": '[{"id":' + id + ',"name":"' + exactProteinName + '","type":"","ranges":"","transcript":""}]'
             });
-            var searcher = new Searcher([species]);
+            var searcher = new Retriever([species]);
 
             var resultPromise = searcher.findProtein(exactProteinName);
 
@@ -115,7 +115,7 @@ describe("A search object", function() {
                 "contentType": "application/json",
                 "responseText": '[{"id":'+interactionId+',"gene":'+geneId+',"proteinGroup":'+pGID+'}]'
             });
-            var searcher = new Searcher([species]);
+            var searcher = new Retriever([species]);
 
             var interactionsPromise = searcher.findInteractions(mockGene);
 
@@ -139,7 +139,7 @@ describe("A search object", function() {
                 "contentType": "application/json",
                 "responseText": '[{"id":'+interactionId+',"gene":'+geneId+',"proteinGroup":'+pGID+'}]'
             });
-            var searcher = new Searcher([species]);
+            var searcher = new Retriever([species]);
 
             var interactionsPromise = searcher.findInteractions(mockGene);
 
@@ -170,7 +170,7 @@ describe("A search object", function() {
                     '{"id":'+interactionId2+',"gene":'+geneId+',"proteinGroup":'+pGID2+'}' +
                 ']'
             });
-            var searcher = new Searcher([species]);
+            var searcher = new Retriever([species]);
 
             var interactionsPromise = searcher.findInteractions(mockGene);
 

@@ -1,4 +1,10 @@
-function getGene(gArgs) {
+function Gene(cArgs) {
+    this.id = cArgs.id;
+    this.species = cArgs.species;
+    this.name = cArgs.name;
+}
+
+Gene.getGene = function(gArgs) {
     return new Promise(function(resolve) {
         var url = '/' + gArgs.species + '/gene/' + gArgs.id + '/json';
         $.getJSON(url).then(function(JSON) {
@@ -6,10 +12,4 @@ function getGene(gArgs) {
             resolve(gene);
         });
     });
-}
-
-function Gene(cArgs) {
-    this.id = cArgs.id;
-    this.species = cArgs.species;
-    this.name = cArgs.name;
 }

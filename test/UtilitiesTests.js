@@ -17,7 +17,7 @@ describe("getGene", function() {
             "responseText": '{"id":' + id + ',"name":"' + expectedName + '","type":"","ranges":"","transcript":""}'
         });
 
-        var illBeAGene = getGene({id: id, species: species});
+        var illBeAGene = Gene.getGene({id: id, species: species});
 
         illBeAGene.then(function(imaGene) {
             expect(imaGene.id).toEqual(id);
