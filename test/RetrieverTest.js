@@ -102,6 +102,7 @@ describe("A Retriever object", function() {
         });
     });
 
+    //TODO: Interactions need type information
     describe("finding interactions with genes", function() {
         it("should find one interaction with targeting group", function(done) {
             var geneId = 235;

@@ -19,7 +19,8 @@ describe("Searching for things with a live cytoscape object", function(){
         var pName = 'AtWRKY42';
         //TODO: mock AJAX requests
         var cy = cytoscape();
-        var searcher = new Searcher(cy);
+        var retriever = new Retriever(['arabidopsis']);
+        var searcher = new Searcher(retriever, cy);
 
         var donePromise = searcher.search(geneName);
 
