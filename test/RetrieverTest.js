@@ -1,12 +1,3 @@
-function rejectFunc (failure) {
-    if(failure instanceof Error) {
-        console.log(failure.message + " at " + failure.fileName + " line " + failure.lineNumber);
-    } else {
-        console.log(failure);
-    }
-    expect(true).toBe(false);
-}
-
 describe("A Retriever object", function() {
     beforeEach(function() {
         jasmine.Ajax.install();
@@ -18,9 +9,9 @@ describe("A Retriever object", function() {
 
     it("should have a list of species", function() {
         var species = ['maize', 'cow', 'generic_meat']
-        var searcher = new Retriever(species);
+        var retriever = new Retriever(species);
 
-        expect(searcher.getSpeciesList()).toEqual(species);
+        expect(retriever.getSpeciesList()).toEqual(species);
     });
 
     describe("finding one or more exact gene matches", function() {
@@ -35,9 +26,9 @@ describe("A Retriever object", function() {
                 "contentType": "application/json",
                 "responseText": '[{"id":' + id + ',"name":"' + exactGeneName + '","type":"","ranges":"","transcript":""}]'
             });
-            var searcher = new Retriever(['maize']);
+            var retriever = new Retriever(['maize']);
 
-            var resultPromise = searcher.findGene(exactGeneName);
+            var resultPromise = retriever.fetchGene(exactGeneName);
 
             resultPromise.then(
                 function(response) {
@@ -63,9 +54,9 @@ describe("A Retriever object", function() {
                 "contentType": "application/json",
                 "responseText": '[{"id":' + g_id + ',"name":"' + exactTerm + '","type":"","ranges":"","transcript":""}]'
             });
-            var searcher = new Retriever(species);
+            var retriever = new Retriever(species);
 
-            var resultPromise = searcher.findGene(exactTerm);
+            var resultPromise = retriever.fetchGene(exactTerm);
 
             resultPromise.then(
                 function(response) {
@@ -88,9 +79,9 @@ describe("A Retriever object", function() {
                 "contentType": "application/json",
                 "responseText": '[{"id":' + id + ',"name":"' + exactProteinName + '","type":"","ranges":"","transcript":""}]'
             });
-            var searcher = new Retriever([species]);
+            var retriever = new Retriever([species]);
 
-            var resultPromise = searcher.findProtein(exactProteinName);
+            var resultPromise = retriever.fetchProtein(exactProteinName);
 
             resultPromise.then(
                 function(response) {
@@ -116,9 +107,9 @@ describe("A Retriever object", function() {
                 "contentType": "application/json",
                 "responseText": '[{"id":'+interactionId+',"gene":'+geneId+',"proteinGroup":'+pGID+'}]'
             });
-            var searcher = new Retriever([species]);
+            var retriever = new Retriever([species]);
 
-            var interactionsPromise = searcher.findInteractions(mockGene);
+            var interactionsPromise = retriever.fetchInteractions(mockGene);
 
             interactionsPromise.then(function(interactions) {
                 expect(interactions.length).toEqual(1);
@@ -140,9 +131,9 @@ describe("A Retriever object", function() {
                 "contentType": "application/json",
                 "responseText": '[{"id":'+interactionId+',"gene":'+geneId+',"proteinGroup":'+pGID+'}]'
             });
-            var searcher = new Retriever([species]);
+            var retriever = new Retriever([species]);
 
-            var interactionsPromise = searcher.findInteractions(mockGene);
+            var interactionsPromise = retriever.fetchInteractions(mockGene);
 
             interactionsPromise.then(function(interactions) {
                 expect(interactions.length).toEqual(1);
@@ -171,9 +162,9 @@ describe("A Retriever object", function() {
                     '{"id":'+interactionId2+',"gene":'+geneId+',"proteinGroup":'+pGID2+'}' +
                 ']'
             });
-            var searcher = new Retriever([species]);
+            var retriever = new Retriever([species]);
 
-            var interactionsPromise = searcher.findInteractions(mockGene);
+            var interactionsPromise = retriever.fetchInteractions(mockGene);
 
             interactionsPromise.then(function(interactions) {
                 expect(interactions.length).toEqual(2);

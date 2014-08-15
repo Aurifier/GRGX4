@@ -6,7 +6,7 @@ Retriever.prototype.getSpeciesList = function() {
     return this.speciesList;
 };
 
-Retriever.prototype.findGene = function(term) {
+Retriever.prototype.fetchGene = function(term) {
     var self = this;
     return new Promise(function(resolve, reject) {
         var exactPromises = [];
@@ -22,7 +22,7 @@ Retriever.prototype.findGene = function(term) {
     });
 };
 
-Retriever.prototype.findProtein = function(term) {
+Retriever.prototype.fetchProtein = function(term) {
     var self = this;
     return new Promise(function(resolve, reject) {
         var exactPromises = [];
@@ -38,7 +38,7 @@ Retriever.prototype.findProtein = function(term) {
     });
 };
 
-Retriever.prototype.findInteractions = function(term) {
+Retriever.prototype.fetchInteractions = function(term) {
     return new Promise(function(resolve, reject) {
         var url = '/'+term.species+'/gene/'+term.id+'/proteingene/json';
         $.getJSON(url).then(function(interactions) {

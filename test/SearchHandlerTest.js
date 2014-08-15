@@ -2,8 +2,8 @@ describe("A SearchHandler object", function() {
     var mockRetriever;
     beforeEach(function() {
         mockRetriever = {
-            findGene: function(){},
-            findInteractions: function(){}
+            fetchGene: function(){},
+            fetchInteractions: function(){}
         };
     });
 
@@ -20,10 +20,10 @@ describe("A SearchHandler object", function() {
         //source info
         var pGroupId = 96;
         //mock data
-        spyOn(mockRetriever, "findGene").and.returnValue(
+        spyOn(mockRetriever, "fetchGene").and.returnValue(
             [{id: geneId, name: exactName, species: 'foopies'}]
         );
-        spyOn(mockRetriever, "findInteractions").and.returnValue(
+        spyOn(mockRetriever, "fetchInteractions").and.returnValue(
             [{source: pGroupId, target: geneId, type: iType}]
         );
         //TODO: More stuff needs mocked I'm sure
