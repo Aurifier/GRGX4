@@ -1,19 +1,37 @@
+//TODO: We could use some examples of what promises resolve to
+/**
+ * Gets AJAX data from the rest API.
+ * @class Retriever
+ * @param {Array} speciesList The list of species the Retriever will search.
+ * @constructor
+ */
 function Retriever(speciesList) {
     this.speciesList = speciesList;
 }
 
+/**
+ * Gets the list of species this Retriever will search.
+ * @method getSpeciesList
+ * @return {Array}
+ */
 Retriever.prototype.getSpeciesList = function() {
     return this.speciesList;
 };
 
-Retriever.prototype.fetchGene = function(term) {
+/**
+ * Fetches a gene by name from the rest API.
+ * @method fetchGene
+ * @param name The name to search
+ * @return {Promise} Resolves with a list of genes with name `name`
+ */
+Retriever.prototype.fetchGene = function(name) {
     var self = this;
     return new Promise(function(resolve, reject) {
         var exactPromises = [];
 
         for(var i=0; i < self.speciesList.length; i++) {
             var species = self.speciesList[i];
-            exactPromises.push(new Promise(exactGenePromise(species, term)));
+            exactPromises.push(new Promise(exactGenePromise(species, name)));
         }
 
         Promise.all(exactPromises).then(function(matches) {
@@ -22,14 +40,20 @@ Retriever.prototype.fetchGene = function(term) {
     });
 };
 
-Retriever.prototype.fetchProtein = function(term) {
+/**
+ * Fetches a protein by name from the rest API.
+ * @method fetchProtein
+ * @param name The name to search
+ * @return {Promise} Resolves with a list of proteins with name `name`
+ */
+Retriever.prototype.fetchProtein = function(name) {
     var self = this;
     return new Promise(function(resolve, reject) {
         var exactPromises = [];
 
         for(var i=0; i < self.speciesList.length; i++) {
             var species = self.speciesList[i];
-            exactPromises.push(new Promise(exactProteinPromise(species, term)));
+            exactPromises.push(new Promise(exactProteinPromise(species, name)));
         }
 
         Promise.all(exactPromises).then(function(matches) {
@@ -38,6 +62,13 @@ Retriever.prototype.fetchProtein = function(term) {
     });
 };
 
+/**
+ * Fetches interactions with `term` from the rest API.
+ * @beta
+ * @method fetchInteractions
+ * @param {Gene|Protein} term
+ * @return {Promise}
+ */
 Retriever.prototype.fetchInteractions = function(term) {
     return new Promise(function(resolve, reject) {
         var url = '/'+term.species+'/gene/'+term.id+'/proteingene/json';
