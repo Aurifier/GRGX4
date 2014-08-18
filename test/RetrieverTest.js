@@ -94,6 +94,8 @@ describe("A Retriever object", function() {
     });
 
     //TODO: Interactions need type information
+    //TODO: Interactions need to specify whether they target a gene or protein
+    //See the Retriever mocks in SearchHandlerTest.js for the above items.
     //TODO: Interaction finding when passed a Protein instead of a gene
     describe("finding interactions with genes", function() {
         it("should find one interaction with targeting group", function(done) {
