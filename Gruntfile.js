@@ -1,3 +1,4 @@
+//TODO: Lint yuidoc
 module.exports = function(grunt) {
  
   grunt.initConfig({
