@@ -15,7 +15,7 @@ module.exports = function(config) {
 
     // list of files / patterns to load in the browser
     files: [
-      'http://code.jquery.com/jquery-2.1.1.min.js',
+      'node_modules/jquery/dist/jquery.js',
       'node_modules/cytoscape/dist/cytoscape.js',
       'src/*.js',
       'test/*.js'
