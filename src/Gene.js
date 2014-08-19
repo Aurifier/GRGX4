@@ -1,7 +1,7 @@
 /**
  * Represents a Gene.
  *
- * In most cases, you should use `Gene.getGene` to instantiate a new
+ * In most cases, you should use `Gene.fetchGene` to instantiate a new
  * Gene, unless you already have all of the properties and just want to collect
  * them into an object.
  * @class Gene

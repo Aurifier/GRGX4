@@ -7,6 +7,7 @@ describe("getGene", function() {
         jasmine.Ajax.uninstall();
     });
 
+    //TODO: Move this test into GeneTest.js, rename getGene to fetchGene
     it("should return a promise to a gene, given a species and id", function(done) {
         var id = 45;
         var species = "kooloolimpah";
