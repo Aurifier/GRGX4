@@ -1,6 +1,6 @@
 //TODO: We could use some examples of what promises resolve to
 /**
- * Gets AJAX data from the rest API.
+ * Gets AJAX data from the REST API.
  * @class Retriever
  * @param {Array} speciesList The list of species the Retriever will search.
  * @constructor
@@ -19,7 +19,7 @@ Retriever.prototype.getSpeciesList = function() {
 };
 
 /**
- * Fetches a gene by name from the rest API.
+ * Fetches a gene by name from the REST API.
  * @method fetchGene
  * @param name The name to search
  * @return {Promise} Resolves with a list of genes with name `name`
@@ -41,7 +41,7 @@ Retriever.prototype.fetchGene = function(name) {
 };
 
 /**
- * Fetches a protein by name from the rest API.
+ * Fetches a protein by name from the REST API.
  * @method fetchProtein
  * @param name The name to search
  * @return {Promise} Resolves with a list of proteins with name `name`
@@ -63,7 +63,7 @@ Retriever.prototype.fetchProtein = function(name) {
 };
 
 /**
- * Fetches interactions with `term` from the rest API.
+ * Fetches interactions with `term` from the REST API.
  * @beta
  * @method fetchInteractions
  * @param {Gene|Protein} term
