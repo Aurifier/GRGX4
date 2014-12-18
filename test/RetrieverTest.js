@@ -14,6 +14,26 @@ describe("A Retriever object", function() {
         expect(retriever.getSpeciesList()).toEqual(species);
     });
 
+    it("should be able to fetch a promise to a gene, given a species and id", function(done) {
+        var id = 45;
+        var species = "kooloolimpah";
+        var expectedName = "KllAch45";
+        jasmine.Ajax.stubRequest('/'+species+'/gene/'+id+'/json').andReturn({
+            "status": 200,
+            "contentType": "application/json",
+            "responseText": '{"id":' + id + ',"name":"' + expectedName + '","type":"","ranges":"","transcript":""}'
+        });
+
+        var illBeAGene = Retriever.fetchGene({id: id, species: species});
+
+        illBeAGene.then(function(imaGene) {
+            expect(imaGene.id).toEqual(id);
+            expect(imaGene.species).toEqual(species);
+            expect(imaGene.name).toEqual(expectedName);
+            done();
+        });
+    });
+
     describe("finding one or more exact gene matches", function() {
         it("should promise a list containing one exact gene match", function(done) {
             var exactGeneName = "fooGene";
@@ -28,7 +48,7 @@ describe("A Retriever object", function() {
             });
             var retriever = new Retriever(['maize']);
 
-            var resultPromise = retriever.fetchGene(exactGeneName);
+            var resultPromise = retriever.searchGeneByName(exactGeneName);
 
             resultPromise.then(
                 function(response) {
@@ -56,7 +76,7 @@ describe("A Retriever object", function() {
             });
             var retriever = new Retriever(species);
 
-            var resultPromise = retriever.fetchGene(exactTerm);
+            var resultPromise = retriever.searchGeneByName(exactTerm);
 
             resultPromise.then(
                 function(response) {

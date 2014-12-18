@@ -19,12 +19,12 @@ Retriever.prototype.getSpeciesList = function() {
 };
 
 /**
- * Fetches a gene by name from the REST API.
- * @method fetchGene
+ * Fetches genes by name from the REST API.
+ * @method searchGeneByName
  * @param name The name to search
  * @return {Promise} Resolves with a list of genes with name `name`
  */
-Retriever.prototype.fetchGene = function(name) {
+Retriever.prototype.searchGeneByName = function(name) {
     var self = this;
     return new Promise(function(resolve, reject) {
         var exactPromises = [];
@@ -58,6 +58,25 @@ Retriever.prototype.fetchProtein = function(name) {
 
         Promise.all(exactPromises).then(function(matches) {
             resolve(processExactMatches(matches));
+        });
+    });
+};
+
+/**
+ * Retrieves a fully populated Gene object.
+ * @method fetchGene
+ * @static
+ * @param gArgs
+ * @param {Integer} gArgs.id
+ * @param {String} gArgs.species
+ * @return {Promise} Resolves with a Gene object.
+ */
+Retriever.fetchGene = function(gArgs) {
+    return new Promise(function(resolve) {
+        var url = '/' + gArgs.species + '/gene/' + gArgs.id + '/json';
+        $.getJSON(url).then(function(JSON) {
+            var gene = new Gene({id: gArgs.id, species: gArgs.species, name: JSON.name});
+            resolve(gene);
         });
     });
 };
