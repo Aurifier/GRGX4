@@ -101,7 +101,7 @@ describe("A Retriever object", function() {
             });
             var retriever = new Retriever([species]);
 
-            var resultPromise = retriever.fetchProtein(exactProteinName);
+            var resultPromise = retriever.searchProteinByName(exactProteinName);
 
             resultPromise.then(
                 function(response) {

@@ -41,12 +41,12 @@ Retriever.prototype.searchGeneByName = function(name) {
 };
 
 /**
- * Fetches a protein by name from the REST API.
- * @method fetchProtein
+ * Fetches proteins by name from the REST API.
+ * @method searchProteinByName
  * @param name The name to search
  * @return {Promise} Resolves with a list of proteins with name `name`
  */
-Retriever.prototype.fetchProtein = function(name) {
+Retriever.prototype.searchProteinByName = function(name) {
     var self = this;
     return new Promise(function(resolve, reject) {
         var exactPromises = [];
