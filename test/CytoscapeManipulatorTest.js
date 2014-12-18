@@ -19,4 +19,17 @@ describe("The CytoscapeManipulator", function() {
 
         expect(mockCy.add).toHaveBeenCalledWith({group: 'nodes', data: {id: geneId, name: name}});
     });
+
+    it("should add a second Gene object to the network", function() {
+        spyOn(mockCy, 'add');
+        var geneId = 18;
+        var name = 'Rumpelstiltskin';
+        var spec = 'nobody cares';
+        var mockGene = {id: geneId, name: name, species: spec};
+
+        var manipulator = new CytoscapeManipulator(mockCy);
+        manipulator.add(mockGene);
+
+        expect(mockCy.add).toHaveBeenCalledWith({group: 'nodes', data: {id: geneId, name: name}});
+    })
 });
