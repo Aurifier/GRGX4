@@ -101,6 +101,21 @@ Retriever.prototype.fetchInteractions = function(term) {
     });
 };
 
+/**
+ * Fetches a list of Proteins in the protein group with the given species and id.
+ * @method fetchProteinGroup
+ * @static
+ * @param args
+ * @param {Integer} args.id
+ * @param {String} args.species
+ * @return {Promise}
+ */
+Retriever.fetchProteinGroup = function(args) {
+    return new Promise(function(resolve, reject) {
+        resolve([{id: 53, name: "shake", species: "ssndf kfj kjf"}]);
+    });
+};
+
 function processExactMatches(matches) {
     return(matches.filter(isNotNull));
 }

@@ -34,6 +34,25 @@ describe("A Retriever object", function() {
         });
     });
 
+    it("should be able to fetch a promise for a list of a single protein, given a species and protein group id", function(done) {
+        var id = 987;
+        var species = "ssndf kfj kjf";
+        var proteinName = "shake";
+        var proteinId = 53;
+        var expectedProtein = {id: proteinId, name: proteinName, species: species};
+
+        var illBeAProteinList = Retriever.fetchProteinGroup({id: id, species: species});
+
+        illBeAProteinList.then(function(imaList) {
+            expect(imaList.length).toEqual(1);
+            expect(imaList[0]).toEqual(expectedProtein);
+            done();
+        })
+    });
+
+    xit("should be able to fetch a promise for a list of multiple proteins, given a species and protein group id", function() {});
+
+    //TODO: Wildcard matches too
     describe("finding one or more exact gene matches", function() {
         it("should promise a list containing one exact gene match", function(done) {
             var exactGeneName = "fooGene";
