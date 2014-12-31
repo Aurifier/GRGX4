@@ -5,11 +5,6 @@ describe("The CytoscapeManipulator", function() {
         mockCy = {
             add: function() {}
         };
-        jasmine.Ajax.install();
-    });
-
-    afterEach(function() {
-        jasmine.Ajax.uninstall();
     });
 
     //Doesn't need to do this.
@@ -38,8 +33,7 @@ describe("The CytoscapeManipulator", function() {
         expect(mockCy.add).toHaveBeenCalledWith({group: 'nodes', data: {id: geneId, name: name}});
     });
 
-    xit("should add a simple interaction to the network", function() {
-        spyOn(mockCy, 'add');
+    it("should add a simple interaction to the network", function() {
         var geneId = 54;
         var geneName = 'Display This Text';
         var mockGene = {id: geneId, name: geneName};
@@ -47,12 +41,27 @@ describe("The CytoscapeManipulator", function() {
         var pGid = 213;
         var type = 2;
         var mockInteraction = {id: 'nobodycares', source: pGid, species: species, target: mockGene, type: type};
-        var expectedId = pGid + "_" + type + "+" + geneId;
+        var protId = 789;
+        var protName = 'foofarchu';
+        var mockProtein = {id: protId, name: protName, species: species};
+        var expectedId = pGid + "_" + type + "_" + geneId;
+        spyOn(Retriever, 'fetchProteinGroup').and.returnValue([mockProtein]);
+        spyOn(mockCy, 'add');
 
         var manipulator = new CytoscapeManipulator(mockCy);
         manipulator.add(mockInteraction);
 
-        //TODO:
-        expect(mockCy.add).toHaveBeenCalledWith({nodes:[], edges:[]});
+        expect(mockCy.add).toHaveBeenCalledWith(
+        {
+            nodes:[
+                {data: {id: protId, name: protName}},
+                {data: {id: geneId, name: geneName}}
+            ],
+            edges:[
+                {data: {id: expectedId, source: protId, target: geneId}}
+            ]
+        });
     });
+
+    //TODO: Test adding a parent node after the child has been added (use ele.move)
 });
