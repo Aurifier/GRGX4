@@ -7,28 +7,33 @@ describe("A SearchHandler object", function() {
         };
     });
 
-    afterEach(function() {
-        jasmine.Ajax.uninstall();
-    });
-
-    //TODO: Uh, I think we've lost track of species info.
     it("should find interactions with a gene if its exact name is given", function(done) {
+        var species = "lkad";
         //target info
         var exactName = 'geneE';
         var geneId = 651;
-        //interaction info
-        var iType = 2;
+        var mockGene = {id: geneId, name: exactName, species: 'foopies'};
         //source info
         var pGroupId = 96;
+        //interaction info
+        var iId = 34;
+        var iType = 2;
+        var mockInteraction = {
+            id: iId,
+            type: iType,
+            species: species,
+            source: pGroupId,
+            target: mockGene
+        };
         //mock data
         spyOn(mockRetriever, "fetchGene").and.returnValue(
             new Promise(function(res, rej) {
-                res([{id: geneId, name: exactName, species: 'foopies'}]);
+                res([mockGene]);
             })
         );
         spyOn(mockRetriever, "fetchInteractions").and.returnValue(
             new Promise(function(res, rej) {
-                res([{source: pGroupId, target: {type: "gene", id: geneId}, type: iType}]);
+                res([mockInteraction]);
             })
         );
         var searcher = new SearchHandler(mockRetriever);
@@ -37,43 +42,50 @@ describe("A SearchHandler object", function() {
 
         resPromise.then(function(result) {
             expect(result.length).toBe(1);
-            expect(result[0]).toEqual(
-                {source: pGroupId, target: {type: "gene", id: geneId}, type: iType}
-            );
+            expect(result[0]).toEqual(mockInteraction);
             done();
         });
     });
 
     it("should find interactions with another gene if its exact name is given", function(done) {
+        var species = "naklu";
         //target info
         var exactName = 'MoTHR4';
         var geneId = 667;
-        //interaction info
-        var iType = 5;
+        var mockGene = {id: geneId, name: exactName, species: 'unknown'};
         //source info
         var pGroupId = 53;
+        //interaction info
+        var iId = 3;
+        var iType = 5;
+        var mockInteraction = {
+            id: iId,
+            type: iType,
+            species: species,
+            source: pGroupId,
+            target: mockGene
+        }
         //mock data
         spyOn(mockRetriever, "fetchGene").and.returnValue(
             new Promise(function(res, rej) {
-                res([{id: geneId, name: exactName, species: 'unknown'}]);
+                res([mockGene]);
             })
         );
         spyOn(mockRetriever, "fetchInteractions").and.returnValue(
             new Promise(function(res, rej) {
-                res([{source: pGroupId, target: {type: "gene", id: geneId}, type: iType}]);
+                res([mockInteraction]);
             })
         );
-        //TODO: More stuff needs mocked I'm sure
         var searcher = new SearchHandler(mockRetriever);
 
         var resPromise = searcher.search(exactName);
 
         resPromise.then(function(result) {
             expect(result.length).toBe(1);
-            expect(result[0]).toEqual(
-                {source: pGroupId, target: {type: "gene", id: geneId}, type: iType}
-            );
+            expect(result[0]).toEqual(mockInteraction);
             done();
         });
     });
+
+    xit("should not find interactions if a gene is not found for the search term");
 });
