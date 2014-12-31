@@ -36,10 +36,16 @@ describe("A Retriever object", function() {
 
     it("should be able to fetch a promise for a list of a single protein, given a species and protein group id", function(done) {
         var id = 987;
-        var species = "ssndf kfj kjf";
+        var species = "ssndfkfjkjf";
         var proteinName = "shake";
         var proteinId = 53;
         var expectedProtein = {id: proteinId, name: proteinName, species: species};
+        var url = '/'+species+'/proteingroup/'+id+'/json';
+        jasmine.Ajax.stubRequest(url).andReturn({
+            "status": 200,
+            "contentType": "application/json",
+            "responseText": '[{"id":' + proteinId + ',"name":"' + proteinName + '"}]'
+        });
 
         var illBeAProteinList = Retriever.fetchProteinGroup({id: id, species: species});
 
@@ -50,7 +56,32 @@ describe("A Retriever object", function() {
         })
     });
 
-    xit("should be able to fetch a promise for a list of multiple proteins, given a species and protein group id", function() {});
+    it("should be able to fetch a promise for a list of multiple proteins, given a species and protein group id", function(done) {
+        var id = 89;
+        var species = "kaiu";
+        var protein1Name = "bar";
+        var protein1Id = 5;
+        var protein2Name = "pills";
+        var protein2Id = 13;
+        var expectedProtein1 = {id: protein1Id, name: protein1Name, species: species};
+        var expectedProtein2 = {id: protein2Id, name: protein2Name, species: species};
+        var url = '/'+species+'/proteingroup/'+id+'/json';
+        jasmine.Ajax.stubRequest(url).andReturn({
+            "status": 200,
+            "contentType": "application/json",
+            "responseText": '[{"id":'+protein1Id+',"name":"'+protein1Name+'"},'
+                           + '{"id":'+protein2Id+',"name":"'+protein2Name+'"}]'
+        });
+
+        var illBeAProteinList = Retriever.fetchProteinGroup({id: id, species: species});
+
+        illBeAProteinList.then(function(imaList) {
+            expect(imaList.length).toEqual(2);
+            expect(imaList).toContain(expectedProtein1);
+            expect(imaList).toContain(expectedProtein2);
+            done();
+        });
+    });
 
     //TODO: Wildcard matches too
     describe("finding one or more exact gene matches", function() {

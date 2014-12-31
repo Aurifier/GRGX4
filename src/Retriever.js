@@ -112,7 +112,14 @@ Retriever.prototype.fetchInteractions = function(term) {
  */
 Retriever.fetchProteinGroup = function(args) {
     return new Promise(function(resolve, reject) {
-        resolve([{id: 53, name: "shake", species: "ssndf kfj kjf"}]);
+        var url = '/'+args.species+'/proteingroup/'+args.id+'/json';
+        $.getJSON(url).then(function(group) {
+            var returnProteins = [];
+            for(var i = 0; i < group.length; i++) {
+                returnProteins.push({id: group[i].id, name: group[i].name, species: args.species});
+            }
+            resolve(returnProteins);
+        });
     });
 };
 
