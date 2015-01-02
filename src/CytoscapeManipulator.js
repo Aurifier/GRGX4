@@ -4,13 +4,13 @@ function CytoscapeManipulator(myCy) {
 }
 
 CytoscapeManipulator.prototype.add = function(obj) {
-    this.cy.add({
-            nodes:[
-                {data: {id: 789, name: 'foofarchu'}},
-                {data: {id: 54, name: 'Display This Text'}}
-            ],
-            edges:[
-                {data: {id: '213_2_54', source: 789, target: 54}}
-            ]
-        });
+    var nodes = [];
+    var target = {data: {id: obj.target.id, name: obj.target.name}};
+    nodes.push(target);
+    var source = Retriever.fetchProteinGroup(obj.source)[0];
+    source = {data: {id: source.id, name: source.name}};
+    nodes.push(source);
+    var edgeId = obj.source + "_" + obj.type + "_" + obj.target.id;
+    var edge = {data: {id: edgeId, source: source.data.id, target: target.data.id}};
+    this.cy.add({nodes:nodes, edges:[edge]});
 };
