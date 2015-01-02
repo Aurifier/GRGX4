@@ -11,7 +11,8 @@ function CytoscapeManipulator(myCy) {
 /**
  * Add an interaction to Cytoscape.js
  * @method add
- * @param {Interaction} interaction The Interaction object to add to Cytoscape.js */
+ * @param {Interaction} interaction The Interaction object to add to Cytoscape.js
+ */
 CytoscapeManipulator.prototype.add = function(interaction) {
     var nodes = [];
     var target = {data: {id: interaction.target.id, name: interaction.target.name}};
