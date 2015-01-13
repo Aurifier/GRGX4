@@ -1,3 +1,4 @@
+var Retriever = require('../src/Retriever');
 describe("A Retriever object", function() {
     beforeEach(function() {
         jasmine.Ajax.install();
@@ -8,7 +9,7 @@ describe("A Retriever object", function() {
     });
 
     it("should have a list of species", function() {
-        var species = ['maize', 'cow', 'generic_meat']
+        var species = ['maize', 'cow', 'generic_meat'];
         var retriever = new Retriever(species);
 
         expect(retriever.getSpeciesList()).toEqual(species);

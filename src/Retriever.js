@@ -1,3 +1,6 @@
+var $ = require('jquery');
+var Gene = require('./Gene');
+module.exports = Retriever;
 //TODO: We could use some examples of what promises resolve to
 /**
  * Gets AJAX data from the REST API.

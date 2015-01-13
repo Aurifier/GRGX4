@@ -1,3 +1,4 @@
+var Interaction = require('../src/Interaction');
 //TODO: tests for SearchHandler and Retriever (at least) need to use Interactions
 //(or mocks) instead of ad-hoc objects
 describe("An Interaction object", function() {

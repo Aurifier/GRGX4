@@ -1,3 +1,4 @@
+module.exports = Interaction;
 /**
  * Represents an interaction between a ProteinGroup and either another
  * ProteinGroup or a Gene. Generally speaking, you should use

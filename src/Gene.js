@@ -1,3 +1,4 @@
+module.exports = Gene;
 /**
  * Represents a Gene.
  *

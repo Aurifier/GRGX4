@@ -1,3 +1,4 @@
+var Gene = require('../src/Gene')
 //TODO: Need some tests where the gene id is invalid and/or non-existent
 describe("A gene", function() {
     it("should have an id, name, and species when provided", function() {

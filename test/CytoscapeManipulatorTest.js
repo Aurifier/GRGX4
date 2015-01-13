@@ -1,3 +1,6 @@
+var Retriever = require('../src/Retriever');
+var CytoscapeManipulator = require('../src/CytoscapeManipulator');
+
 describe("The CytoscapeManipulator", function() {
     var mockCy;
 

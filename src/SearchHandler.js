@@ -1,3 +1,4 @@
+module.exports = SearchHandler;
 /**
  * Handles searching logic.
  * @class SearchHandler

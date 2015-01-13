@@ -1,3 +1,4 @@
+var SearchHandler = require('../src/SearchHandler');
 describe("A SearchHandler object", function() {
     var mockRetriever;
     beforeEach(function() {

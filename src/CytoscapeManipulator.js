@@ -1,3 +1,5 @@
+var Retriever = require('./Retriever');
+module.exports = CytoscapeManipulator;
 /**
  * Wraps a Cytoscape.js object to easily add Interaction objects.
  * @class CytoscapeManipulator
