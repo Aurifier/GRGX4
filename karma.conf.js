@@ -29,7 +29,7 @@ module.exports = function(config) {
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     preprocessors: {
-        'src/*.js': ['coverage', 'browserify'],
+        'src/*.js': ['browserify'],
         'test/*.js': ['browserify']
     },
 
@@ -38,6 +38,16 @@ module.exports = function(config) {
     // possible values: 'dots', 'progress'
     // available reporters: https://npmjs.org/browse/keyword/karma-reporter
     reporters: ['progress','coverage'],
+
+    "browserify": {
+        "transform": ["browserify-istanbul"]
+    },
+
+    "coverageReporter": {
+        "reporters": [
+            {"type": "text-summary"}
+        ]
+    },
 
 
     // web server port
