@@ -9,6 +9,12 @@ module.exports = function(grunt) {
     jshint: {
       all: ['<%= globalConfig.src %>*.js']
     },
+    browserify: {
+        main: {
+            src: '<%= globalConfig.src %>*.js',
+            dest: 'js/grgx.js'
+        }
+    },
     karma: {
       unit: {
         configFile: 'karma.conf.js',
@@ -53,8 +59,9 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-karma');
   grunt.loadNpmTasks('grunt-contrib-yuidoc');
+  grunt.loadNpmTasks('grunt-browserify');
 
   grunt.registerTask('lint', ['jshint', 'yuidoc-lint']);
-  grunt.registerTask('all', ['lint', 'karma', 'yuidoc']);
+  grunt.registerTask('all', ['lint', 'karma', 'yuidoc', 'browserify']);
   grunt.registerTask('default', ['all']);
 };
