@@ -16,15 +16,17 @@ module.exports = function(grunt) {
         }
     },
     karma: {
-      unit: {
-        configFile: 'karma.conf.js',
-        singleRun: true
-      }
-      /*continuous: { //PhantomJS doesn't support Promises yet
-        configFile: 'karma.conf.js',
-        singleRun: true
-        browsers: ['PhantomJS']
-      }*/
+        unit: {
+            configFile: 'karma.conf.js',
+            singleRun: true
+        }
+    },
+    jasmine_node: {
+        options: {
+            forceExit: false,
+            matchall: true
+        },
+        all: ['test/functional/']
     },
     yuidoc: {
       compile: {
@@ -38,6 +40,25 @@ module.exports = function(grunt) {
           outdir: 'docs/'
         }
       }
+    },
+    'start-selenium-server': {
+        dev: {
+            options: {
+                downloadUrl: 'http://selenium-release.storage.googleapis.com/2.44/selenium-server-standalone-2.44.0.jar'
+            }
+        }
+    },
+    'stop-selenium-server': {
+        dev: {
+
+        }
+    },
+    connect: {
+        server: {
+            options: {
+                port: 9001
+            }
+        }
     }
   });
  
@@ -56,12 +77,36 @@ module.exports = function(grunt) {
       testlint.stderr.pipe(process.stderr);
   });
 
+  var seleniumChildProcesses = {};
+  grunt.event.on('selenium.start', function(target, process){
+      grunt.log.ok('Saw process for target: ' +  target);
+      seleniumChildProcesses[target] = process;
+  });
+
+  grunt.util.hooker.hook(grunt.fail, function(){
+      // Clean up selenium if we left it running after a failure.
+      grunt.log.writeln('Attempting to clean up running selenium server.');
+      for(var target in seleniumChildProcesses) {
+          grunt.log.ok('Killing selenium target: ' + target);
+          try {
+              seleniumChildProcesses[target].kill('SIGTERM');
+          }
+          catch(e) {
+              grunt.log.warn('Unable to stop selenium target: ' + target);
+          }
+      }
+  });
+
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-karma');
   grunt.loadNpmTasks('grunt-contrib-yuidoc');
   grunt.loadNpmTasks('grunt-browserify');
+  grunt.loadNpmTasks('grunt-selenium-server');
+  grunt.loadNpmTasks('grunt-jasmine-node');
+  grunt.loadNpmTasks('grunt-contrib-connect');
 
+  grunt.registerTask('functional', ['browserify', 'connect', 'start-selenium-server:dev', 'jasmine_node']);
   grunt.registerTask('lint', ['jshint', 'yuidoc-lint']);
-  grunt.registerTask('all', ['lint', 'karma', 'yuidoc', 'browserify']);
+  grunt.registerTask('all', ['lint', 'karma:unit', 'functional', 'yuidoc', 'browserify']);
   grunt.registerTask('default', ['all']);
 };
